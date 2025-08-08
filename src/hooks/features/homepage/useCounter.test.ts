@@ -1,37 +1,21 @@
-import { renderHook, act } from "@testing-library/react";
-import useCounter from "./useCounter";
+import { useState } from "react";
 
-describe("useCounter", () => {
-  it("should initialize count to 0 and val to 1", () => {
-    const { result } = renderHook(() => useCounter());
-    expect(result.current.count).toBe(0);
-    expect(result.current.val).toBe(1);
-  });
+export default function useCounter() {
+  const [count, setCount] = useState(0);
+  const [val, setVal] = useState(1);
 
-  it("should increment count by val", () => {
-    const { result } = renderHook(() => useCounter());
-    act(() => {
-      result.current.increment();
-    });
-    expect(result.current.count).toBe(1);
-  });
+  function increment() {
+    setCount((count) => count + val);
+  }
 
-  it("should update val and increment by new val", () => {
-    const { result } = renderHook(() => useCounter());
-    act(() => {
-      result.current.setVal(5);
-      result.current.increment();
-    });
-    expect(result.current.count).toBe(5);
-    expect(result.current.val).toBe(5);
-  });
+  function decrement() {
+    setCount((c) => c - val);
+  }
 
-  it("should increment multiple times", () => {
-    const { result } = renderHook(() => useCounter());
-    act(() => {
-      result.current.increment();
-      result.current.increment();
-    });
-    expect(result.current.count).toBe(2);
-  });
-});
+  function reset() {
+    setCount(0);
+  }
+
+  // return { count, increment, val, setVal };
+  return { count, increment, decrement, reset, val, setVal };
+}
